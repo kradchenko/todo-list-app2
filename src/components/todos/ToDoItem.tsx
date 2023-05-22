@@ -31,22 +31,26 @@ export const ToDoItem = ({
 
     return (
         <tr className="h-16 hover:bg-gray-600 rounded-lg cursor-pointer">
-            <td className="w-[10%]">
+            <td className="w-[5%] md:w-[10%]">
                 <input
                     type="checkbox"
-                    className="checkbox"
+                    className="checkbox checkbox-xs sm:checkbox-sm md:checkbox-md"
                     checked={isChecked}
                     onChange={handleItemSelect}
                 />
             </td>
-            <td className="w-[40%]">{todo.name}</td>
-            <td className="w-[20%]">
+            <td className="w-[45%] md:w-[40%] text-xs sm:text-sm md:text-base text-center">
+                {todo.name}
+            </td>
+            <td className="w-[35%] md:w-[30%] text-xs sm:text-sm md:text-base text-center">
                 {todo.deadline
                     ? format(parseISO(todo.deadline), 'HH:mm dd/MM/yyyy')
                     : 'No deadline'}
             </td>
-            <td className="w-[20%]">{todo.completed ? '✅' : '❌'}</td>
-            <td>
+            <td className="w-[10%] md:w-[10%] text-xs sm:text-sm md:text-base text-center">
+                {todo.completed ? '✅' : '❌'}
+            </td>
+            <td className="w-[5%] md:w-[10%]">
                 <ToDoActionMenu
                     onEdit={onEdit}
                     onMark={onMark}

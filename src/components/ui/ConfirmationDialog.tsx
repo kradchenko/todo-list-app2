@@ -22,7 +22,7 @@ export const ConfirmationDialog = ({
 
             <div className="fixed inset-0 flex items-center justify-center p-4">
                 <Dialog.Panel className="bg-gray-800 w-full max-w-lg rounded-lg p-5">
-                    <Dialog.Title className="text-2xl mb-5">{title}</Dialog.Title>
+                    <Dialog.Title className="text-xl sm:text-2xl mb-5">{title}</Dialog.Title>
                     <Dialog.Description className="mb-10 leading-7">
                         {description}
                     </Dialog.Description>

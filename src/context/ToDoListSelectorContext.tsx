@@ -1,5 +1,6 @@
 import { createContext, ReactNode } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 
 import { TitleInputForm } from 'components/todos/ToDoListTitleContainer';
@@ -55,19 +56,40 @@ export const ToDoListSelectorProvider = ({ children }: ToDoListSelectorProviderP
         });
 
         await refetch();
+
+        toast.success(
+            <div>
+                Successfully created <span className="text-purple-500">TODO List</span>
+            </div>,
+        );
+
         navigate(`/${data.code}`);
     };
 
     const handleRenameToDoList = async (id: number, putData: { title: string }) => {
-        await api.put<ToDoList>(`/todo-list/${id}`, putData);
+        const { data } = await api.put<ToDoList>(`/todo-list/${id}`, putData);
+
+        toast.success(
+            <div>
+                Successfully renamed TODO List to{' '}
+                <span className="text-purple-500">{data.title}</span>
+            </div>,
+        );
 
         await refetch();
     };
 
     const handleTodoListRemove = async (id: number) => {
-        await api.delete<ToDoList>(`/todo-list/${id}`);
+        const { data: resData } = await api.delete<ToDoList>(`/todo-list/${id}`);
 
         await refetch();
+
+        toast.success(
+            <div>
+                Successfully removed TODO List
+                <span className="text-purple-500">{resData.title}</span>
+            </div>,
+        );
 
         if (data?.length === 0 || !data) {
             navigate('/');

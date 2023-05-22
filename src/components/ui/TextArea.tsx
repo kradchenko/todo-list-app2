@@ -13,7 +13,7 @@ export const TextArea = ({ name, label, placeholder, className }: TextAreProps) 
 
     return (
         <div className={classNames('form-control flex flex-col', className)}>
-            <label htmlFor={name}>
+            <label htmlFor={name} className="mb-2">
                 <span className="label-text">{label}</span>
             </label>
             <textarea

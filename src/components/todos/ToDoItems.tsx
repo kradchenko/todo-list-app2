@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { ChangeEvent } from 'react';
+import { toast } from 'react-toastify';
 import { ReactComponent as PlusIcon } from 'assets/plus.svg';
 
 import { ToDo } from 'schema';
 import { api } from 'utils/api';
 
+import { ToDoFormModal } from './ToDoFormModal';
 import { ToDoInfoModal } from './ToDoInfoModal';
 import { ToDoItem } from './ToDoItem';
-import { ToDoFormModal } from './ToDoModal';
 import { ToDosActions } from './ToDosActions';
 
 interface ToDosItemsProps {
@@ -53,6 +54,12 @@ export const ToDoItems = ({ todos, toDoListId, refetch }: ToDosItemsProps) => {
 
         refetch();
 
+        toast.success(
+            <div>
+                Successfully deleted <span className="text-purple-500">marked TODOs</span>
+            </div>,
+        );
+
         setSelectedTodos([]);
     };
 
@@ -62,6 +69,15 @@ export const ToDoItems = ({ todos, toDoListId, refetch }: ToDosItemsProps) => {
                 completed: markType === 'completed' ? true : false,
             });
         }
+
+        toast.success(
+            <div>
+                Successfully marked TODOs as{' '}
+                <span className="text-purple-500">
+                    {markType === 'completed' ? 'completed' : 'not completed yet'}
+                </span>
+            </div>,
+        );
 
         refetch();
         setSelectedTodos([]);
@@ -78,15 +94,31 @@ export const ToDoItems = ({ todos, toDoListId, refetch }: ToDosItemsProps) => {
     };
 
     const handleToDoMark = async (todoId: number, status: boolean) => {
-        await api.put(`/todo-list/${toDoListId}/todo/${todoId}`, {
+        const { data } = await api.put<ToDo>(`/todo-list/${toDoListId}/todo/${todoId}`, {
             completed: status ? false : true,
         });
+
+        toast.success(
+            <div>
+                Successfully marked <span className="text-purple-500">{data.name}</span> as{' '}
+                <span className="text-purple-500">
+                    {markType === 'completed' ? 'completed' : 'not completed yet'}
+                </span>
+            </div>,
+        );
 
         refetch();
     };
 
     const handleToDoDelete = async (todoId: number) => {
-        await api.delete(`/todo-list/${toDoListId}/todo/${todoId}`);
+        const { data } = await api.delete<ToDo>(`/todo-list/${toDoListId}/todo/${todoId}`);
+
+        toast.success(
+            <div>
+                Successfully deleted TODO <span className="text-purple-500">{data.name}</span>
+            </div>,
+        );
+
         refetch();
     };
 
@@ -120,11 +152,17 @@ export const ToDoItems = ({ todos, toDoListId, refetch }: ToDosItemsProps) => {
                 <table className="w-full">
                     <thead className="w-full">
                         <tr>
-                            <th className="w-[10%]"></th>
-                            <th className="w-[40%] text-left">Name</th>
-                            <th className="w-[20%] text-left">Deadline</th>
-                            <th className="w-[20%] text-left">Status</th>
-                            <th className="w-[10%]"></th>
+                            <th className="w-[5%] sm:w-[10%]"></th>
+                            <th className="w-[45%] sm:w-[40%] text-center text-xs sm:text-base">
+                                Name
+                            </th>
+                            <th className="w-[35%] sm:w-[30%] text-center text-xs sm:text-base">
+                                Deadline
+                            </th>
+                            <th className="w-[10%] sm:w-[10%] text-center text-xs sm:text-base">
+                                Status
+                            </th>
+                            <th className="w-[5%] sm:w-[10%]"></th>
                         </tr>
                     </thead>
                     <tbody className="w-full">
@@ -163,14 +201,14 @@ export const ToDoItems = ({ todos, toDoListId, refetch }: ToDosItemsProps) => {
                 </table>
             ) : (
                 <div className="flex justify-center text-xl">
-                    You don't have any ToDo 🤷🏻‍♂️? Create one by clicking on this icon{' '}
+                    You don't have any TODO 🤷🏻‍♂️? Create one by clicking on this icon{' '}
                     <button
                         className="mx-5  hover:text-purple-500 transition-all duration-200 ease-in-out"
                         onClick={handleCreateModal}
                     >
                         <PlusIcon width={24} height={24} />
                     </button>
-                    corner.
+                    or the one in the corner.
                 </div>
             )}
             <ToDoFormModal

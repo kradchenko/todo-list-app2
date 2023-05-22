@@ -17,7 +17,7 @@ export const ToDoList = () => {
     }, [todoCode, todoLists]);
 
     if (isLoading) {
-        return <div className="p-10">Loading...</div>;
+        return <div className="p-5 sm:p-10">Loading...</div>;
     }
 
     if (!isLoading && todoLists.length === 0) {
@@ -25,7 +25,7 @@ export const ToDoList = () => {
     }
 
     return (
-        <div className="p-10">
+        <div className="p-5 sm:p-10">
             {todoList ? (
                 <>
                     <ToDoListTitleContainer
@@ -33,7 +33,10 @@ export const ToDoList = () => {
                         title={todoList.title}
                         toDoListId={todoList.id}
                     />
-                    <ToDosContainer toDoListId={todoList.id} />
+                    <ToDosContainer
+                        key={`todos-container-${todoList.id}`}
+                        toDoListId={todoList.id}
+                    />
                 </>
             ) : (
                 <div>Problem occured while fetching ToDo List</div>

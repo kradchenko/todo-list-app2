@@ -11,6 +11,6 @@ export const CreateToDoListButton = ({ onClick }: CreateToDoListButtonnProps) =>
         onClick={onClick}
     >
         <PlusIcon width={12} height={12} className="mr-2" />
-        Create ToDo List
+        Create TODO List
     </button>
 );

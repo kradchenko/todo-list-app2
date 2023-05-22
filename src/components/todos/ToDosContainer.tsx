@@ -20,12 +20,12 @@ export const ToDosContainer = ({ toDoListId }: ToDosContainerProps) => {
 
     return (
         <Tab.Group>
-            <Tab.List className="mt-10">
+            <Tab.List className="mt-5 sm:mt-10">
                 <Tab as={Fragment}>
                     {({ selected }) => (
                         <button
                             className={classNames(
-                                'px-5 text-lg rounded-xl border border-purple-500 mr-5',
+                                'px-5 text-base sm:text-lg rounded-xl border border-purple-500 mr-2 sm:mr-5',
                                 selected ? 'bg-purple-500 text-white' : null,
                             )}
                         >
@@ -37,7 +37,7 @@ export const ToDosContainer = ({ toDoListId }: ToDosContainerProps) => {
                     {({ selected }) => (
                         <button
                             className={classNames(
-                                'px-5 text-lg rounded-xl border border-purple-500 mr-5',
+                                'px-5 text-base sm:text-lg rounded-xl border border-purple-500 mr-2 sm:mr-5',
                                 selected ? 'bg-purple-500 text-white' : null,
                             )}
                         >
@@ -49,7 +49,7 @@ export const ToDosContainer = ({ toDoListId }: ToDosContainerProps) => {
                     {({ selected }) => (
                         <button
                             className={classNames(
-                                'px-5 text-lg rounded-xl border border-purple-500',
+                                'px-5 text-base sm:text-lg rounded-xl border border-purple-500',
                                 selected ? 'bg-purple-500 text-white' : null,
                             )}
                         >

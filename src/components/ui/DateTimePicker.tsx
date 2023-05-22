@@ -12,7 +12,7 @@ export const DateTimePicker = ({ name, label, className }: DateTimePickerProps) 
 
     return (
         <div className={classNames('form-control', className)}>
-            <label htmlFor={name}>
+            <label htmlFor={name} className="mb-2">
                 <span className="label-text">{label}</span>
             </label>
             <input

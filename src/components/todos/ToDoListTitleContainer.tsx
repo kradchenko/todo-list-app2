@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReactComponent as RemoveIcon } from 'assets/bin.svg';
 import { ReactComponent as EditIcon } from 'assets/edit.svg';
@@ -41,18 +42,18 @@ export const ToDoListTitleContainer = ({ toDoListId, title }: ToDoListTitleConta
     if (!isEditing) {
         return (
             <div className="flex items-center h-12">
-                <span className="text-3xl flex-1">{title}</span>
+                <span className="text-xl sm:text-2xl md:text-3xl flex-1">{title}</span>
                 <button
                     onClick={() => setIsEditing(true)}
                     className="hover:text-purple-400 transition-all duration-200 ease-in-out"
                 >
-                    <EditIcon width={28} height={28} />
+                    <EditIcon className="w-[22px] h-[22px] sm:w-[28px] sm:h-[28px]" />
                 </button>
                 <button
                     className="hover:text-red-500 ml-5 transition-all duration-200 ease-in-out"
                     onClick={() => setIsDelModalOpen(true)}
                 >
-                    <RemoveIcon width={28} height={28} />
+                    <RemoveIcon className="w-[22px] h-[22px] sm:w-[28px] sm:h-[28px]" />
                 </button>
                 <ConfirmationDialog
                     title={
@@ -82,22 +83,33 @@ export const ToDoListTitleContainer = ({ toDoListId, title }: ToDoListTitleConta
 
             setIsEditing(false);
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            toast.error('Error occured while updating TODO List name');
         }
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col sm:flex-row items-center">
             <input
-                className="text-3xl border-b hover:border-purple-400 focus:border-purple-500 outline-none bg-transparent flex-1 text-gray-400 focus:text-white"
+                className="text-xl w-full sm:text-2xl md:text-3xl border-b hover:border-purple-400 focus:border-purple-500 outline-none bg-transparent flex-1 text-gray-400 focus:text-white"
                 {...register('title')}
             />
-            <button type="button" className="btn btn-error ml-10" onClick={handleCancel}>
-                Cancel
-            </button>
-            <button type="submit" className="btn btn-success ml-5" disabled={!isValid}>
-                Submit
-            </button>
+            <div className="mt-5 md:mt-0 sm:ml-5 md:ml-10 flex justify-between sm:justify-start w-full sm:w-auto">
+                <button
+                    type="button"
+                    className="btn btn-error btn-sm sm:btn-md"
+                    onClick={handleCancel}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="btn btn-success btn-sm sm:btn-md sm:ml-3 md:ml-5"
+                    disabled={!isValid}
+                >
+                    Submit
+                </button>
+            </div>
         </form>
     );
 };

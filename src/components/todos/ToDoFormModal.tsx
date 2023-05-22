@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { Dialog, Switch } from '@headlessui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parseISO } from 'date-fns';
@@ -58,33 +59,50 @@ export const ToDoFormModal = ({
     const onSubmit = async (formData: ToDoForm) => {
         if (!initValues) {
             try {
-                const { data } = await api.post(`/todo-list/${toDoListId}/todo`, {
+                const { data } = await api.post<ToDo>(`/todo-list/${toDoListId}/todo`, {
                     name: formData.name,
                     description: formData.description,
                     deadline: isDeadline ? formData.deadline : null,
                     completed: false,
                 });
 
-                onSuccess();
+                toast.success(
+                    <div>
+                        Successfully created TODO{' '}
+                        <span className="text-purple-500">{data.name}</span>
+                    </div>,
+                );
 
-                console.log(data);
+                methods.reset();
+                onSuccess();
             } catch (error) {
-                console.log(error);
+                console.error(error);
+                toast.error('Error occured while creating TODO');
             }
         } else {
             try {
-                const { data } = await api.put(`/todo-list/${toDoListId}/todo/${initValues.id}`, {
-                    name: formData.name,
-                    description: formData.description,
-                    deadline: isDeadline ? formData.deadline : null,
-                    completed: initValues.completed,
-                });
+                const { data } = await api.put<ToDo>(
+                    `/todo-list/${toDoListId}/todo/${initValues.id}`,
+                    {
+                        name: formData.name,
+                        description: formData.description,
+                        deadline: isDeadline ? formData.deadline : null,
+                        completed: initValues.completed,
+                    },
+                );
 
+                toast.success(
+                    <div>
+                        Successfully edited TODO{' '}
+                        <span className="text-purple-500">{data.name}</span>
+                    </div>,
+                );
+
+                methods.reset();
                 onSuccess();
-
-                console.log(data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
+                toast.error('Error occured while editing TODO');
             }
         }
     };
@@ -95,8 +113,8 @@ export const ToDoFormModal = ({
 
             <div className="fixed inset-0 flex items-center justify-center p-4">
                 <Dialog.Panel className="bg-gray-800 w-full max-w-lg rounded-lg p-5">
-                    <Dialog.Title className="text-2xl">
-                        {initValues ? `Edit ${initValues.name}` : 'Create ToDo'}
+                    <Dialog.Title className="text-xl sm:text-2xl">
+                        {initValues ? `Edit ${initValues.name}` : 'Create TODO'}
                     </Dialog.Title>
                     <FormProvider {...methods}>
                         <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -104,29 +122,32 @@ export const ToDoFormModal = ({
                                 <TextInput
                                     name="name"
                                     label="Name"
-                                    placeholder="Enter ToDo name"
+                                    placeholder="Enter TODO name"
                                     className="mb-5"
                                 />
                                 <TextArea
                                     name="description"
                                     label="Description"
-                                    placeholder="Enter a description of ToDo if you want"
+                                    placeholder="Enter a description of TODO if you want"
                                     className="mb-5"
                                 />
-                                <Switch
-                                    checked={isDeadline}
-                                    onChange={setIsDeadline}
-                                    className={`${isDeadline ? 'bg-purple-900' : 'bg-gray-300'}
-          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 mb-3`}
-                                >
-                                    <span
-                                        aria-hidden="true"
-                                        className={`${
-                                            isDeadline ? 'translate-x-9' : 'translate-x-0'
-                                        }
+                                <div className="flex items-center mb-5">
+                                    <span className="mr-10 text-sm">Do you have a deadline?</span>
+                                    <Switch
+                                        checked={isDeadline}
+                                        onChange={setIsDeadline}
+                                        className={`${isDeadline ? 'bg-purple-900' : 'bg-gray-300'}
+          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                                    >
+                                        <span
+                                            aria-hidden="true"
+                                            className={`${
+                                                isDeadline ? 'translate-x-9' : 'translate-x-0'
+                                            }
             pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                                    />
-                                </Switch>
+                                        />
+                                    </Switch>
+                                </div>
                                 {isDeadline ? (
                                     <DateTimePicker
                                         name="deadline"

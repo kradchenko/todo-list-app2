@@ -32,6 +32,12 @@ export const ToDoInfoModal = ({ todo, isOpen, onClose }: ToDoInfoModalProps) => 
                             : 'No deadline'}
                     </Dialog.Description>
 
+                    <Dialog.Description className="mb-10 flex flex-col">
+                        <span className="text-sm text-purple-500 mb-2">Status:</span>
+
+                        {todo?.completed ? 'Completed' : 'Not completed yet'}
+                    </Dialog.Description>
+
                     <div className="flex justify-end">
                         <button type="button" className="btn btn-error ml-5" onClick={onClose}>
                             Cancel
